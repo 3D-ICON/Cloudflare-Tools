@@ -211,4 +211,29 @@ function ipv6_in_range($ip, $range_ip)
 
     return $in_range;
 }
+
+function ip_range_type($range_ip)
+{
+    if (strpos($range_ip, ':') !== false) {
+        //if ip range provided is ipv6 then
+        //echo "range provided is ipv6";
+        return 1;
+    } else {
+        //if ip range provided is ipv4 then
+        //echo "range provided is ipv4";
+        return 2;
+    }
+}
+
+function ip_in_range($ip, $range_ip)
+{
+    //only check IPv4 addresses against IPv4 ranges
+    if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) && ip_range_type($range_ip) == 2) {
+        return ipv4_in_range($ip, $range_ip);
+    }
+    //only check IPv6 addresses against IPv6 ranges
+    if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) && ip_range_type($range_ip) == 1) {
+        return ipv6_in_range($ip, $range_ip);
+    }
+}
 ?>
